@@ -1,0 +1,18 @@
+X THREAD — Environment, not memory (7 tweets, all ≤280)
+Attach assets/scheme_tweet.png to tweet 1.
+
+1/ Everyone is building memory for agents: short-term, long-term, RAG, profile memory. I think it's the wrong unit of architecture. An agent needs exactly one memory — working memory. Everything else is not memory. It's the environment. 🧵
+
+2/ The definition is a test, not a metaphor: the environment is the part of the world that survives reasoning. Wipe an object — if no fact about the world is lost, it was memory (rebuildable at the cost of compute). If something is gone forever, it was the environment.
+
+3/ One asymmetry holds the whole architecture: memory is rewritten directly, the environment is not. There is no operation called "update my long-term memory." Reasoning modifies memory. Actions modify the environment.
+
+4/ Why it matters: an agent that edits its own long-term store collapses reasoning and reality into one layer — every new conclusion can rewrite the knowledge it was derived from. This failure is measured, not hypothetical: naive free-write memory degrades agents as it grows.
+
+5/ Second argument, structural: memory is private, the environment is shared. Humans, systems, events and other agents write to it. And once a result lands, provenance stops mattering — an agent's document is as much a fact of the world as a human's email.
+
+6/ The environment has its own laws: a validation gate on derived artifacts, and it's the SAME law for humans and agents. Review and merge for people, deterministic pipelines for models. An agent grading its own results is an agent rewriting its memory with extra steps.
+
+7/ None of the parts are new — RL's agent-environment loop, blackboards, event sourcing, code review. The composition might be: refusing to call the persistent layer "memory" at all. Essay + scheme 👇 https://github.com/maaakso/environment-not-memory
+
+#AIAgents #AgentMemory #ContextEngineering
