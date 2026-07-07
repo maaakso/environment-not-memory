@@ -1,6 +1,17 @@
-X THREAD — Environment, not memory (7 tweets, all ≤280)
+X THREAD — Environment, not memory (short version, 3 tweets, all ≤280)
 Attach assets/cover_tweet.png to tweet 1 (concept cover: agent + human, private memories, shared environment).
-Attach assets/scheme_tweet.png to tweet 3 (the full architecture scheme).
+Attach assets/scheme_tweet.png to tweet 2 (the full architecture scheme).
+
+1/ Everyone is building memory for agents: short-term, long-term, RAG, profile memory. I think it's the wrong unit of architecture. An agent needs exactly one memory — working memory. Everything else is not memory. It's the environment. 🧵
+
+2/ The test is erasure, not lifetime: wipe an object — if no fact about the world is lost, it was memory. One asymmetry follows: memory is rewritten directly; the environment changes only through work that passes its own validation gate — the same law for humans and agents.
+
+3/ None of the parts are new — RL's agent-environment loop, blackboards, event sourcing, code review. The composition might be: refusing to call the persistent layer "memory" at all. Essay + scheme 👇 https://github.com/maaakso/environment-not-memory
+
+#AIAgents #AgentMemory #ContextEngineering
+
+
+— Long version (7 tweets), if ever needed —
 
 1/ Everyone is building memory for agents: short-term, long-term, RAG, profile memory. I think it's the wrong unit of architecture. An agent needs exactly one memory — working memory. Everything else is not memory. It's the environment. 🧵
 
@@ -15,5 +26,3 @@ Attach assets/scheme_tweet.png to tweet 3 (the full architecture scheme).
 6/ The environment has its own laws: a validation gate on derived artifacts, and it's the SAME law for humans and agents. Review and merge for people, deterministic pipelines for models. An agent grading its own results is an agent rewriting its memory with extra steps.
 
 7/ None of the parts are new — RL's agent-environment loop, blackboards, event sourcing, code review. The composition might be: refusing to call the persistent layer "memory" at all. Essay + scheme 👇 https://github.com/maaakso/environment-not-memory
-
-#AIAgents #AgentMemory #ContextEngineering
