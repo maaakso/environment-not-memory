@@ -34,6 +34,8 @@ The environment changes through work, and only through work.
 
 A written document becomes part of the environment. A commit changes the code. A closed task changes the project. A finished investigation becomes a new fact.
 
+And the environment changes forward: new state supersedes the old; history is not rewritten.
+
 Reasoning modifies memory. Actions modify the environment.
 
 ## Why this matters
@@ -54,7 +56,7 @@ What enters the environment is decided by the environment's own rules — and th
 
 The gate guards derived artifacts, not the world itself. Raw observations — messages, commits, telemetry — stream into the environment as append-only facts regardless of anyone. What faces validation is the derived layer: conclusions, summaries, decisions.
 
-How these rules should be built, and why they end up mattering more than the model — that is the next article.
+Two laws of the environment remain open here: how its rules should be built, and how an agent reads a world far too large to read — attention, not just retrieval. Both end up mattering more than the model. That is the next article.
 
 ## The loop
 
@@ -62,7 +64,7 @@ In practice the boundary shows up as a sequence of questions the agent answers o
 
 *Who am I* — the role, loaded before the request, because it is the lens the request will be read through. *What do they want* — the task itself. *What do I remember* — a lookup in its own memory: perhaps the answer already exists and the world doesn't need to be touched at all. *Where am I* — reading the environment for the context memory doesn't hold. Then it acts. Then the result faces the environment's rules and either becomes a fact of the world or remains a thought.
 
-Memory is checked before the world on purpose: a cache hit costs nothing, reading reality is the expensive path.
+Memory is checked before the world on purpose: a cache hit is cheap, reading reality is the expensive path. But memory is a hypothesis about the world, never its source of truth — a hit is verified against the environment, not trusted.
 
 ## Prior art
 
