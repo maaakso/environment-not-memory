@@ -1,0 +1,254 @@
+<title>Agent &amp; Environment — scheme</title>
+<style>
+  :root{
+    --paper:#F4F6F8; --card:#FFFFFF; --ink:#24303C; --muted:#5D6C7B; --line:#D6DDE4;
+    --read:#2F6FB4; --act:#2A8A5F; --mem:#7659B3; --contrib:#3A4756;
+    --mem-bg:#F1EDF9; --env-bg:#F3FAF6; --gate-bg:#FBFCFD; --chip:#F1F4F7;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#11161C; --card:#1A222B; --ink:#E4EAF0; --muted:#8FA0B0; --line:#2D3945;
+      --read:#6FA8DF; --act:#57BA8C; --mem:#AB8FDF; --contrib:#B4C2CF;
+      --mem-bg:#251F35; --env-bg:#16261F; --gate-bg:#161D25; --chip:#232D38;
+    }
+  }
+  :root[data-theme="dark"]{
+      --paper:#11161C; --card:#1A222B; --ink:#E4EAF0; --muted:#8FA0B0; --line:#2D3945;
+      --read:#6FA8DF; --act:#57BA8C; --mem:#AB8FDF; --contrib:#B4C2CF;
+      --mem-bg:#251F35; --env-bg:#16261F; --gate-bg:#161D25; --chip:#232D38;
+  }
+  :root[data-theme="light"]{
+    --paper:#F4F6F8; --card:#FFFFFF; --ink:#24303C; --muted:#5D6C7B; --line:#D6DDE4;
+    --read:#2F6FB4; --act:#2A8A5F; --mem:#7659B3; --contrib:#3A4756;
+    --mem-bg:#F1EDF9; --env-bg:#F3FAF6; --gate-bg:#FBFCFD; --chip:#F1F4F7;
+  }
+  body{background:var(--paper); color:var(--ink);
+    font-family:"Avenir Next","Segoe UI","Helvetica Neue",system-ui,sans-serif;
+    margin:0; padding:28px 20px 48px;}
+  .wrap{max-width:1280px; margin:0 auto;}
+  header h1{font-size:1.45rem; margin:0 0 6px; letter-spacing:-.01em; text-wrap:balance;}
+  header p.sub{color:var(--muted); margin:0 0 14px; font-size:.95rem; max-width:78ch; line-height:1.45;}
+  .laws{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 22px; padding:0; list-style:none;}
+  .laws li{font-size:.78rem; background:var(--chip); border:1px solid var(--line);
+    border-radius:999px; padding:4px 12px; color:var(--muted);}
+  .laws li b{color:var(--ink); font-weight:600;}
+  .scroll{overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--card);}
+  .canvas{position:relative; width:1240px; height:964px;}
+  svg.arrows{position:absolute; inset:0; width:1240px; height:964px; pointer-events:none;}
+  .box{position:absolute; background:var(--card); border:1.5px solid var(--line);
+    border-radius:12px; padding:12px 14px; box-sizing:border-box;}
+  .box h2{font-size:.82rem; margin:0 0 2px; letter-spacing:.06em; text-transform:uppercase;}
+  .box .cap{font-size:.74rem; color:var(--muted); margin:0 0 8px; line-height:1.4;}
+  .eyebrow{font-size:.66rem; letter-spacing:.09em; text-transform:uppercase; font-weight:600; margin:0 0 3px;}
+  .chips{display:flex; flex-wrap:wrap; gap:6px;}
+  .chip{background:var(--chip); border:1px solid var(--line); border-radius:8px;
+    padding:5px 9px; font-size:.76rem;}
+  .chip small{display:block; color:var(--muted); font-size:.66rem; margin-top:1px;}
+  ul.plain{margin:0; padding:0; list-style:none; font-size:.78rem; line-height:1.5;}
+  ul.plain li{padding:3px 0; border-bottom:1px dashed var(--line);}
+  ul.plain li:last-child{border-bottom:none;}
+  .note{font-size:.7rem; color:var(--muted); margin-top:8px; line-height:1.4;}
+
+  .legend{left:20px; top:24px; width:240px; height:196px;}
+  .legend .item{display:flex; align-items:center; gap:8px; font-size:.74rem; padding:5px 0; color:var(--muted);}
+  .swatch{width:26px; height:0; border-top:2.5px solid; flex:none;}
+  .swatch.dash{border-top-style:dashed;}
+
+  .agents{left:330px; top:24px; width:530px; height:120px;}
+  .memory{left:940px; top:24px; width:280px; height:234px; background:var(--mem-bg); border-color:var(--mem);}
+  .memory h2{color:var(--mem);}
+  .memops{left:940px; top:288px; width:280px; height:244px;}
+  .memops h2{color:var(--mem); font-size:.74rem;}
+  .gate{left:330px; top:300px; width:560px; height:224px; background:var(--gate-bg); border-color:var(--act); border-style:dashed;}
+  .gate h2{color:var(--act);}
+  .gate .eyebrow{color:var(--act);}
+  .crit{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
+  .crit .chip{font-size:.72rem;}
+  .contrib{left:940px; top:544px; width:280px; height:256px;}
+  .contrib h2{color:var(--contrib);}
+  .env{left:330px; top:560px; width:560px; height:240px; background:var(--env-bg); border-color:var(--act); border-width:2px;}
+  .env h2{color:var(--act);}
+  .env .axiom{font-size:.8rem; font-style:italic; margin:0 0 10px;}
+  .cycle{left:20px; top:828px; width:1200px; height:120px;}
+  .cycle h2{color:var(--ink); font-size:.74rem;}
+  .steps{display:flex; align-items:stretch; gap:0; margin-top:8px;}
+  .step{flex:1; background:var(--chip); border:1px solid var(--line); border-radius:8px;
+    padding:7px 8px; font-size:.68rem; line-height:1.35;}
+  .step b{display:block; font-size:.7rem; margin-bottom:2px;}
+  .step-arrow{align-self:center; padding:0 5px; color:var(--act); font-weight:700; flex:none;}
+
+  .lbl{position:absolute; font-size:.7rem; font-weight:600; line-height:1.3;}
+  .lbl.read{color:var(--read);}
+  .lbl.act{color:var(--act);}
+  .lbl.mem{color:var(--mem);}
+  .lbl.contrib-l{color:var(--contrib); font-weight:500;}
+  .lbl.soft{font-weight:500; opacity:.9;}
+
+  .arrows .read{stroke:var(--read);}
+  .arrows .act{stroke:var(--act);}
+  .arrows .mem{stroke:var(--mem);}
+  .arrows .contrib-a{stroke:var(--contrib);}
+  .arrows path, .arrows line, .arrows polyline{fill:none; stroke-width:2.5;}
+  .arrows .dash{stroke-dasharray:6 5; stroke-width:2;}
+  footer{color:var(--muted); font-size:.78rem; margin-top:14px; max-width:84ch; line-height:1.5;}
+</style>
+
+<div class="wrap">
+<header>
+  <h1>The agent and the environment</h1>
+  <p class="sub">Companion scheme for “Agents don't need long-term memory. They need an environment.” The environment is the part of the world that survives reasoning. The test is erasure: memory can be wiped without losing a single fact about the world; the environment cannot.</p>
+  <ul class="laws">
+    <li><b>Memory is rewritten directly</b> — it belongs to the agent</li>
+    <li><b>The environment changes only through work</b> — there is no “update my long-term memory”</li>
+    <li><b>The gate belongs to the environment</b> — one law for humans and agents alike</li>
+  </ul>
+</header>
+
+<div class="scroll"><div class="canvas">
+
+<svg class="arrows" viewBox="0 0 1240 964" aria-hidden="true">
+  <defs>
+    <marker id="m-read" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="var(--read)"></path>
+    </marker>
+    <marker id="m-act" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="var(--act)"></path>
+    </marker>
+    <marker id="m-mem" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="var(--mem)"></path>
+    </marker>
+    <marker id="m-con" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="var(--contrib)"></path>
+    </marker>
+  </defs>
+
+  <!-- act: agents → gate → environment (one vertical spine) -->
+  <line class="act" x1="610" y1="144" x2="610" y2="294" marker-end="url(#m-act)"></line>
+  <line class="act" x1="610" y1="528" x2="610" y2="554" marker-end="url(#m-act)"></line>
+
+  <!-- read: environment → agents (left corridor, no crossings) -->
+  <polyline class="read" points="330,660 300,660 300,84 322,84" marker-end="url(#m-read)"></polyline>
+
+  <!-- thinking: agents ↔ working memory -->
+  <line class="mem" x1="864" y1="84" x2="932" y2="84" marker-start="url(#m-mem)" marker-end="url(#m-mem)"></line>
+  <!-- memory ↔ harness -->
+  <line class="mem" x1="1080" y1="262" x2="1080" y2="284" marker-start="url(#m-mem)" marker-end="url(#m-mem)"></line>
+
+  <!-- contributors: derived artifacts → gate (corridor between columns) -->
+  <polyline class="act" points="936,620 915,620 915,454 898,454" marker-end="url(#m-act)"></polyline>
+  <!-- contributors: raw observations → environment -->
+  <line class="contrib-a" x1="936" y1="700" x2="894" y2="700" marker-end="url(#m-con)"></line>
+</svg>
+
+<div class="box legend">
+  <h2>Edges</h2>
+  <div class="item"><span class="swatch" style="border-color:var(--read)"></span>reading</div>
+  <div class="item"><span class="swatch" style="border-color:var(--act)"></span>change through action</div>
+  <div class="item"><span class="swatch" style="border-color:var(--mem)"></span>memory operations</div>
+  <div class="item"><span class="swatch" style="border-color:var(--contrib)"></span>raw observations</div>
+</div>
+
+<div class="box agents">
+  <h2>① Agents</h2>
+  <p class="cap">Read the environment directly. Change it only through the results of work.</p>
+  <div class="chips">
+    <span class="chip">Analyst</span>
+    <span class="chip">Researcher</span>
+    <span class="chip">Code agent</span>
+    <span class="chip">Docs agent</span>
+    <span class="chip">…</span>
+  </div>
+</div>
+
+<div class="box memory">
+  <h2>② Working memory</h2>
+  <p class="cap">The agent's private thinking apparatus, run by a harness. Survives sessions and restarts; losing it loses no fact about the world — everything is rebuildable from the environment.</p>
+  <div class="chips">
+    <span class="chip">Dialogue context</span>
+    <span class="chip">Result cache<small>snapshots + metadata</small></span>
+    <span class="chip">Hypotheses &amp; plans</span>
+  </div>
+</div>
+
+<div class="box memops">
+  <h2>Memory harness — free rein</h2>
+  <ul class="plain">
+    <li>Add &amp; cache</li>
+    <li>Search &amp; recall</li>
+    <li>Rephrase &amp; compress</li>
+    <li>Restructure</li>
+    <li>Delete / forget (TTL)</li>
+    <li>Focus attention</li>
+  </ul>
+  <p class="note">What fails the gate stays here: a thought, not a fact — and dies with memory.</p>
+</div>
+
+<div class="box gate">
+  <p class="eyebrow">A law of the environment — same for every contributor</p>
+  <h2>③ Validation gate</h2>
+  <p class="cap">Guards the write path of derived artifacts, human and agent alike. Top-level rules are shared; concrete checks differ: review and approval for people, deterministic pipelines for agents.</p>
+  <div class="crit">
+    <span class="chip">Accuracy<small>facts and sources</small></span>
+    <span class="chip">Completeness<small>enough for integrity</small></span>
+    <span class="chip">Consistency<small>contradictions reconciled, not discarded</small></span>
+    <span class="chip">Usefulness<small>matters to the system's goals</small></span>
+    <span class="chip">Stability<small>a change, not noise</small></span>
+  </div>
+</div>
+
+<div class="box env">
+  <h2>④ Environment · Workspace</h2>
+  <p class="axiom">“The part of the world that survives reasoning”</p>
+  <p class="cap">The store of <b>facts about the world</b> — the shared state every cycle of reasoning starts from.</p>
+  <div class="chips">
+    <span class="chip">Documents<small>architecture, specs, research</small></span>
+    <span class="chip">Tasks<small>tickets, statuses, deadlines</small></span>
+    <span class="chip">Code<small>repo, commits, versions</small></span>
+    <span class="chip">Discussions<small>threads, decisions</small></span>
+    <span class="chip">Data &amp; reports<small>analytics, logs, metrics</small></span>
+    <span class="chip">…</span>
+  </div>
+  <p class="note">Lives by its own laws, independent of any agent. Provenance stops mattering: an agent's document is as much a fact as a human's email.</p>
+</div>
+
+<div class="box contrib">
+  <h2>⑤ Environment contributors</h2>
+  <p class="cap">Raw observations flow in directly, append-only. Derived artifacts pass the shared gate.</p>
+  <ul class="plain">
+    <li>People</li>
+    <li>Systems &amp; services</li>
+    <li>Events &amp; triggers</li>
+    <li>External sources</li>
+  </ul>
+  <p class="note">Memory is private. The environment is shared — that is why it isn't memory.</p>
+</div>
+
+<div class="box cycle">
+  <h2>The agent's wake-up loop</h2>
+  <div class="steps">
+    <div class="step"><b>1 · Who am I?</b>The role — the lens the request is read through</div>
+    <div class="step-arrow">→</div>
+    <div class="step"><b>2 · What do they want?</b>Receive and understand the task</div>
+    <div class="step-arrow">→</div>
+    <div class="step"><b>3 · What do I remember?</b>Memory lookup: the answer may already exist</div>
+    <div class="step-arrow">→</div>
+    <div class="step"><b>4 · Where am I?</b>Read the environment for missing context</div>
+    <div class="step-arrow">→</div>
+    <div class="step"><b>5 · Act</b>Change the world through tools</div>
+    <div class="step-arrow">→</div>
+    <div class="step"><b>6 · The gate</b>The result faces the environment's rules</div>
+    <div class="step-arrow">→</div>
+    <div class="step"><b>7 · A fact of the world</b>The change joins the environment</div>
+  </div>
+  <p class="note" style="margin-top:6px">Memory is checked before the world on purpose: a cache hit is cheap; reading reality is the expensive path.</p>
+</div>
+
+<!-- edge labels -->
+<div class="lbl read" style="left:140px; top:330px; width:150px; text-align:right;">observe the environment<br>(read)</div>
+<div class="lbl act" style="left:625px; top:200px;">act:<br>results of work</div>
+<div class="lbl act" style="left:625px; top:528px;">validated changes only</div>
+<div class="lbl mem" style="left:858px; top:58px; width:80px; text-align:center;">thinking</div>
+</div></div>
+
+<footer>The asymmetry is held by infrastructure, not by the model's discipline: working memory is rewritten directly; the environment changes only through actions that pass its own rules. Whatever fails the gate remains working memory and dies with it.</footer>
+</div>
