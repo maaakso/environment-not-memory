@@ -1,5 +1,6 @@
 X THREAD — Environment, not memory (7 tweets, all ≤280)
-Attach assets/scheme_tweet.png to tweet 1.
+Attach assets/cover_tweet.png to tweet 1 (concept cover: agent + human, private memories, shared environment).
+Attach assets/scheme_tweet.png to tweet 3 (the full architecture scheme).
 
 1/ Everyone is building memory for agents: short-term, long-term, RAG, profile memory. I think it's the wrong unit of architecture. An agent needs exactly one memory — working memory. Everything else is not memory. It's the environment. 🧵
 
