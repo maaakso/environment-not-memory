@@ -2,6 +2,16 @@
 
 *An agent has exactly one memory — its working memory. Everything else is the world it lives in.*
 
+> **Status: the conceptual foundation of a series.** The architecture built on this paradigm is described in the sequel, [the environment over the chaos](https://github.com/maaakso/environment-over-chaos), and is being tested on one production workspace; the improvement loop that maintains it is [the warehouse loop](https://github.com/maaakso/warehouse-loop).
+
+**TL;DR**
+
+- The unit of agent architecture is not memory. It is the boundary between thinking and reality.
+- An agent needs exactly one memory — working memory: session context, caches, recall, expiry, managed by a harness and easily outliving a session. What makes it memory is ownership, not lifetime: the agent may rewrite it freely because nothing in it defines the outside world.
+- Everything else is the environment — the part of the world that survives reasoning. The test is erasure: wipe the object; if something is lost forever, it was environment, not memory.
+- The asymmetry that defines the architecture: memory is rewritten directly; the environment changes only through work — actions that pass the environment's own rules. There is no operation called "update my long-term memory."
+- Most memory architectures teach the agent to remember more. This one forbids it to remember anything it didn't do.
+
 ![The agent and the environment](assets/scheme.png)
 
 ## The problem
@@ -77,3 +87,7 @@ None of the parts are new. What is not established is the composition: refusing 
 ## The point
 
 Don't build the agent a bigger memory. Build it a world. Give it one scratchpad it owns completely — and an environment it can change only by doing work that survives the environment's own rules.
+
+## License
+
+Text and diagrams: [CC BY 4.0](LICENSE). If code appears in this repository later, it will carry its own permissive license (MIT or Apache-2.0).
